@@ -1,0 +1,225 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.github.crawler-commons</groupId>
+	<artifactId>urlfrontier</artifactId>
+	<packaging>pom</packaging>
+	<version>2.3.1</version>
+	<name>urlfrontier</name>
+
+	<url>https://github.com/crawler-commons/url-frontier</url>
+
+	<description>API definition, resources and reference implementation of URL Frontiers</description>
+
+	<inceptionYear>2020</inceptionYear>
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/crawler-commons/url-frontier</url>
+		<connection>scm:git:git://github.com/crawler-commons/url-frontier.git</connection>
+		<developerConnection>scm:git:git@github.com:crawler-commons/url-frontier.git</developerConnection>
+		<tag>2.3.1</tag>
+	</scm>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/crawler-commons/url-frontier/issues</url>
+	</issueManagement>
+
+	<mailingLists>
+		<mailingList>
+			<name>Project Mailing List</name>
+			<post>crawler-commons [at] googlegroups [dot] com</post>
+		</mailingList>
+	</mailingLists>
+
+	<organization>
+		<name>Crawler-Commons</name>
+		<url>http://github.com/crawler-commons</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<name>Julien Nioche</name>
+			<email>julien@digitalpebble.com</email>
+			<organization>DigitalPebble</organization>
+			<organizationUrl>http://www.digitalpebble.com</organizationUrl>
+		</developer>
+	</developers>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- needed to build within Docker -->
+		<skipFormatCode>false</skipFormatCode>
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.9.0</version>
+					<configuration>
+						<release>11</release>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>3.0.0-M5</version>
+					<configuration>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+						<useReleaseProfile>false</useReleaseProfile>
+						<releaseProfiles>release</releaseProfiles>
+						<goals>deploy</goals>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>com.cosium.code</groupId>
+				<artifactId>git-code-format-maven-plugin</artifactId>
+				<version>3.3</version>
+				<executions>
+					<!-- On commit, format the modified java files -->
+					<execution>
+						<id>install-formatter-hook</id>
+						<goals>
+							<goal>install-hooks</goal>
+						</goals>
+					</execution>
+					<!-- On Maven verify phase, fail if any file (including unmodified) 
+						is badly formatted -->
+					<execution>
+						<id>validate-code-format</id>
+						<goals>
+							<goal>validate-code-format</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<skip>${skipFormatCode}</skip>
+					<googleJavaFormatOptions>
+						<aosp>true</aosp>
+						<fixImportsOnly>false</fixImportsOnly>
+						<skipSortingImports>false</skipSortingImports>
+						<skipRemovingUnusedImports>false</skipRemovingUnusedImports>
+					</googleJavaFormatOptions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>(3.2.5,)</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>3.0.1</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-source-plugin</artifactId>
+							<version>3.2.1</version>
+							<executions>
+								<execution>
+									<id>attach-sources</id>
+									<goals>
+										<goal>jar-no-fork</goal>
+									</goals>
+								</execution>
+							</executions>
+						</plugin>
+
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-jar-plugin</artifactId>
+							<version>3.2.2</version>
+							<executions>
+								<execution>
+									<id>attach-test</id>
+									<goals>
+										<goal>test-jar</goal>
+									</goals>
+								</execution>
+							</executions>
+						</plugin>
+
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-javadoc-plugin</artifactId>
+							<version>3.3.1</version>
+							<executions>
+								<execution>
+									<id>attach-javadocs</id>
+									<goals>
+										<goal>jar</goal>
+									</goals>
+								</execution>
+							</executions>
+						</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<modules>
+		<module>API</module>
+		<module>service</module>
+		<module>client</module>
+		<module>tests</module>
+	</modules>
+
+</project>

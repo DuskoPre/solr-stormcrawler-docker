@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.github.crawler-commons</groupId>
+		<artifactId>urlfrontier</artifactId>
+		<version>2.3.1</version>
+	</parent>
+
+	<name>urlfrontier-API</name>
+	<artifactId>urlfrontier-API</artifactId>
+	<packaging>jar</packaging>
+
+	<description>URLFrontier Java API</description>
+
+	<properties>
+		<grpc.version>1.50.2</grpc.version>
+		<protoc.version>3.20.3</protoc.version>
+	</properties>
+
+	<dependencies>
+
+		<dependency> <!-- necessary for Java 9+ -->
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>annotations-api</artifactId>
+			<version>6.0.53</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty-shaded</artifactId>
+			<version>${grpc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-protobuf</artifactId>
+			<version>${grpc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-stub</artifactId>
+			<version>${grpc.version}</version>
+		</dependency>
+
+	</dependencies>
+</project>
